@@ -1,0 +1,2 @@
+# For handling nginx git pull
+www-data ALL=(ALL) NOPASSWD: /usr/bin/git
