@@ -9,26 +9,26 @@ RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
 
 # Add repos and add nginx web server
 RUN sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-    apt update && \
-    apt -y upgrade && \
-    apt install -y software-properties-common && \
+    apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && \
     add-apt-repository -y ppa:ondrej/nginx && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 && \
-    apt update && \
-    apt install -y nginx
+    apt-get update && \
+    apt-get install -y nginx nginx-extras
 
 # Add MongoDB to repo list
 RUN echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 
 # Install MongoDB, PHP and PHP MongoDB driver
-RUN apt update && \
-    apt update && \
-    apt install -y mongodb-org php7.2-fpm php-mongodb composer
+RUN apt-get update && \
+    apt-get update && \
+    apt-get install -y mongodb-org php7.2-fpm php-mongodb composer
 
 # Lastly, bring up to the latest version:
-RUN apt update && \
-    apt dist-upgrade -y
+RUN apt-get update && \
+    apt-get dist-upgrade -y
 
 # Finally, clear up
 RUN rm -rf /var/lib/apt/lists/*
