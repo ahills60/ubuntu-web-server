@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # This script is executed by docker on initialisation
 
@@ -10,4 +10,3 @@ service nginx start
 
 # enable bash if necessary
 bash
-
