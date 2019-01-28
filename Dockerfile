@@ -51,3 +51,5 @@ EXPOSE 80
 ENTRYPOINT ["/bootscript.sh"]
 
 CMD ["/bin/bash"]
+
+CMD ["nginx", "-g", "daemon off;"]
