@@ -43,7 +43,7 @@ RUN chmod 744 /bootscript.sh
 
 
 # Expose HTML directory and nginx configs
-VOLUME ["/var/www/html", "/etc/nginx/"]
+VOLUME ["/var/www/html"]
 
 # Expose web server port
 EXPOSE 80
