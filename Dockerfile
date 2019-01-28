@@ -32,16 +32,15 @@ RUN apt-get update && \
 RUN apt-get update && \
     apt-get dist-upgrade -y
 
-# Finally, clear up
-RUN rm -rf /var/lib/apt/lists/*
+RUN mkdir -p /etc/my_init.d
 
 # Add configuration files
 COPY confs/nginx/default /etc/nginx/sites-available/
 COPY confs/sudoers.d/nginxgit /etc/sudoers.d/
-COPY scripts/bootscript.sh /
+COPY scripts/bootscript.sh /etc/my_init.d/bootscript.sh
 
 RUN ls -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-RUN chmod 744 /bootscript.sh
+RUN chmod 744 /etc/my_init.d/bootscript.sh
 
 
 # Expose HTML directory and nginx configs
