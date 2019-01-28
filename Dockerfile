@@ -34,8 +34,9 @@ RUN apt update && \
 RUN rm -rf /var/lib/apt/lists/*
 
 # Add configuration files
-ADD confs/nginx/default /etc/nginx/default
-ADD confs/sudoers.d/nginxgit /etc/sudoers.d/nginxgit
+COPY confs/nginx/default /etc/nginx/sites-available/
+COPY confs/sudoers.d/nginxgit /etc/sudoers.d/
+RUN ls -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 # Expose HTML directory and nginx configs
 VOLUME ["/var/www/html", "/etc/nginx/"]
