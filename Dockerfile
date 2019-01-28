@@ -48,6 +48,6 @@ VOLUME ["/var/www/html", "/etc/nginx/"]
 # Expose web server port
 EXPOSE 80
 
-ENTRYPOINT ["/bin/bash -c '/bootscript.sh'"]
+ENTRYPOINT ["/bootscript.sh"]
 
 CMD ["/bin/bash"]
