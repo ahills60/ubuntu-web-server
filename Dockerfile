@@ -36,12 +36,18 @@ RUN rm -rf /var/lib/apt/lists/*
 # Add configuration files
 COPY confs/nginx/default /etc/nginx/sites-available/
 COPY confs/sudoers.d/nginxgit /etc/sudoers.d/
+COPY scripts/bootscript.sh /
+
 RUN ls -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+RUN chmod 744 /bootscript.sh
+
 
 # Expose HTML directory and nginx configs
 VOLUME ["/var/www/html", "/etc/nginx/"]
 
 # Expose web server port
 EXPOSE 80
+
+ENTRYPOINT ["/bin/bash -c '/bootscript.sh\'"]
 
 CMD ["/bin/bash"]
