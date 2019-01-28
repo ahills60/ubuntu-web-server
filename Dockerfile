@@ -2,7 +2,9 @@
 # 
 # Andrew Hills (a.hills@sheffield.ac.uk)
 
-FROM ubuntu:bionic
+FROM phusion:baseimage:0.11
+
+CMD ["/sbin/my_init"]
 
 # Set location
 RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
@@ -48,8 +50,4 @@ VOLUME ["/var/www/html"]
 # Expose web server port
 EXPOSE 80
 
-ENTRYPOINT ["/bootscript.sh"]
-
-CMD ["/bin/bash"]
-
-CMD ["nginx", "-g", "daemon off;"]
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
