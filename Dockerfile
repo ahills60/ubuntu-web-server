@@ -2,7 +2,7 @@
 # 
 # Andrew Hills (a.hills@sheffield.ac.uk)
 
-FROM phusion:baseimage:0.11
+FROM phusion/baseimage:master
 
 CMD ["/sbin/my_init"]
 
