@@ -15,7 +15,6 @@ RUN sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
     apt-get -y upgrade && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:ondrej/php && \
-    add-apt-repository -y ppa:ondrej/nginx && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 && \
     apt-get update && \
     apt-get install -y nginx nginx-extras
