@@ -3,6 +3,7 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [Automated Builds](#automated-builds)
 
 ## Introduction
 This dockerfile builds an Ubuntu 22.04 development web server with standard nginx (Ubuntu's 1.18 package line), PHP 8.4 (from ppa:ondrej/php), Composer, and MongoDB Community 6.0 (from MongoDB's official Jammy repository). Deploy site content using an external workflow, such as GitHub Actions.
@@ -40,3 +41,17 @@ Then navigate to the directory of interest, e.g. `/var/www/html`, and run php co
 ```bash
 composer require monogodb/mongodb
 ```
+## Automated Builds
+A GitHub Actions workflow (`.github/workflows/docker-publish.yml`) builds the image from the checked-out branch's `Dockerfile` and pushes it to [Docker Hub](https://hub.docker.com/r/andrewhills/ubuntu-web-server):
+
+| Branch      | Image tag                                 |
+|-------------|-------------------------------------------|
+| `master`    | `andrewhills/ubuntu-web-server:latest`    |
+| `webserver` | `andrewhills/ubuntu-web-server:webserver` |
+
+The workflow runs on every push to these branches and can also be triggered manually from the Actions tab. For it to work, the following repository secrets must be configured under *Settings > Secrets and variables > Actions*:
+
+- `DOCKERHUB_USERNAME` - the Docker Hub username.
+- `DOCKERHUB_TOKEN` - a Docker Hub [access token](https://docs.docker.com/security/for-developers/access-tokens/) with read/write permissions.
+
+Note that the workflow file must be present on each branch it should run for (i.e. both `master` and `webserver`).
