@@ -3,7 +3,6 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Additional Features](#additional-features)
 - [Automated Builds](#automated-builds)
 
 ## Introduction
@@ -42,9 +41,6 @@ Then navigate to the directory of interest, e.g. `/var/www/html`, and run php co
 ```bash
 composer require monogodb/mongodb
 ```
-## Additional Features
-This container implements a `git pull` hook within nginx that activates on navigation to `/git-pull`. This will only work if credentials to the repository have been set up accordingly for the root user and that the html directory is a git repository.
-
 ## Automated Builds
 A GitHub Actions workflow (`.github/workflows/docker-publish.yml`) builds the image from the checked-out branch's `Dockerfile` and pushes it to [Docker Hub](https://hub.docker.com/r/andrewhills/ubuntu-web-server):
 
