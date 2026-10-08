@@ -3,11 +3,8 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-<<<<<<< HEAD
-=======
 - [Additional Features](#additional-features)
 - [Automated Builds](#automated-builds)
->>>>>>> origin/master
 
 ## Introduction
 This dockerfile builds an Ubuntu 22.04 development web server with standard nginx (Ubuntu's 1.18 package line), PHP 8.4 (from ppa:ondrej/php), Composer, and MongoDB Community 6.0 (from MongoDB's official Jammy repository). Deploy site content using an external workflow, such as GitHub Actions.
@@ -45,9 +42,6 @@ Then navigate to the directory of interest, e.g. `/var/www/html`, and run php co
 ```bash
 composer require monogodb/mongodb
 ```
-<<<<<<< HEAD
-=======
-
 ## Additional Features
 This container implements a `git pull` hook within nginx that activates on navigation to `/git-pull`. This will only work if credentials to the repository have been set up accordingly for the root user and that the html directory is a git repository.
 
@@ -65,4 +59,3 @@ The workflow runs on every push to these branches and can also be triggered manu
 - `DOCKERHUB_TOKEN` - a Docker Hub [access token](https://docs.docker.com/security/for-developers/access-tokens/) with read/write permissions.
 
 Note that the workflow file must be present on each branch it should run for (i.e. both `master` and `webserver`).
->>>>>>> origin/master
