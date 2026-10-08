@@ -10,6 +10,8 @@ This dockerfile builds an Ubuntu 22.04 development web server with standard ngin
 
 The image tracks the MongoDB 6.0 package line rather than pinning exactly 6.0.29; installed patch versions depend on upstream availability. The `ubuntu:22.04` tag likewise tracks Jammy updates rather than a fixed 22.04.5 image. MongoDB 6.0 is end-of-life, so this stack is intended for development, not production.
 
+The PHP MongoDB extension is installed from PECL and pinned to `1.21.5` for both PHP 8.4 CLI and FPM. This preserves compatibility with applications using the `mongodb/mongodb 1.21.5` library, which requires `ext-mongodb ^1.21.0` (below 2.0). Rebuild the image and recreate existing containers to apply this change; restarting an old container does not update its extension.
+
 At startup, `/usr/local/bin/start-services.sh` starts PHP-FPM and MongoDB without systemd, then runs nginx in the foreground. MongoDB keeps its package-default localhost binding and stores data in `/var/lib/mongodb`; mount that directory separately if database persistence is needed.
 
 ## Installation

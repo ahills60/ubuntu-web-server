@@ -27,8 +27,20 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         nginx php8.4-fpm php8.4-cli php8.4-mbstring \
-        php8.4-intl php8.4-mongodb composer mongodb-org && \
+        php8.4-intl composer mongodb-org && \
+    apt-get install -y --no-install-recommends \
+        php8.4-dev php-pear build-essential pkg-config libssl-dev && \
     update-alternatives --set php /usr/bin/php8.4 && \
+    update-alternatives --set phpize /usr/bin/phpize8.4 && \
+    update-alternatives --set php-config /usr/bin/php-config8.4 && \
+    printf '\n' | PHP_PEAR_PHP_BIN=/usr/bin/php8.4 pecl install mongodb-1.21.5 && \
+    printf 'extension=mongodb.so\n' > /etc/php/8.4/mods-available/mongodb.ini && \
+    phpenmod -v 8.4 -s cli mongodb && \
+    phpenmod -v 8.4 -s fpm mongodb && \
+    apt-get purge -y --auto-remove \
+        php8.4-dev php-pear build-essential pkg-config libssl-dev && \
+    php8.4 -r 'exit(phpversion("mongodb") === "1.21.5" ? 0 : 1);' && \
+    php-fpm8.4 -i | grep -Fx 'MongoDB extension version => 1.21.5' && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add configuration files
