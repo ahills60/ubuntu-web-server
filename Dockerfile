@@ -2,45 +2,41 @@
 # 
 # Andrew Hills (a.hills@sheffield.ac.uk)
 
-FROM phusion/baseimage:master
+FROM ubuntu:22.04
 
-CMD ["/sbin/my_init"]
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/London
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Set location
-RUN ln -fs /usr/share/zoneinfo/Europe/London /etc/localtime
+RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime
 
-# Add repos and add nginx web server
-RUN sed -i 's/# \(.*multiverse$\)/\1/g' /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get -y upgrade && \
-    apt-get install -y software-properties-common && \
+# Add repositories and install the development server stack
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        software-properties-common ca-certificates curl gnupg lsb-release \
+        tzdata && \
     add-apt-repository -y ppa:ondrej/php && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 && \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
+        gpg --dearmor -o /etc/apt/keyrings/mongodb-server-6.0.gpg && \
+    chmod 644 /etc/apt/keyrings/mongodb-server-6.0.gpg && \
+    echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/mongodb-server-6.0.gpg] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" \
+        > /etc/apt/sources.list.d/mongodb-org-6.0.list && \
     apt-get update && \
-    apt-get install -y nginx nginx-extras
-
-# Add MongoDB to repo list
-RUN echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-4.0.list
-
-# Install MongoDB, PHP and PHP MongoDB driver
-RUN apt-get update && \
-    apt-get update && \
-    apt-get install -y mongodb-org php7.2-fpm php-mongodb composer
-
-# Lastly, bring up to the latest version:
-RUN apt-get update && \
-    apt-get dist-upgrade -y
-
-RUN mkdir -p /etc/my_init.d
+    apt-get install -y --no-install-recommends \
+        nginx php8.4-fpm php8.4-cli php8.4-mbstring \
+        php8.4-intl php8.4-mongodb composer mongodb-org && \
+    update-alternatives --set php /usr/bin/php8.4 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add configuration files
-COPY confs/nginx/default /etc/nginx/sites-available/
-COPY confs/sudoers.d/nginxgit /etc/sudoers.d/
-COPY scripts/bootscript.sh /etc/my_init.d/bootscript.sh
+COPY confs/nginx/default /etc/nginx/sites-available/default
+COPY scripts/start-services.sh /usr/local/bin/start-services.sh
 
-RUN ls -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-RUN chmod 744 /etc/my_init.d/bootscript.sh
-
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default && \
+    chmod 755 /usr/local/bin/start-services.sh
 
 # Expose HTML directory and nginx configs
 VOLUME ["/var/www/html"]
@@ -48,4 +44,4 @@ VOLUME ["/var/www/html"]
 # Expose web server port
 EXPOSE 80
 
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+CMD ["/usr/local/bin/start-services.sh"]
