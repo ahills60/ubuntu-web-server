@@ -102,13 +102,6 @@ server {
 	location ~ /base_images_dockerfiles {
 		deny all;
 	}
-	
-	# Git Pull Location
-	location /git-pull {
-		include fastcgi_params;
-		fastcgi_param SCRIPT_FILENAME /usr/local/lib/git-pull.php;
-		fastcgi_pass unix:/run/php/php8.4-fpm.sock;
-	}
 }
 
 

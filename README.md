@@ -3,10 +3,9 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
-- [Additional Features](#additional-features)
 
 ## Introduction
-This dockerfile builds an Ubuntu 22.04 development web server with standard nginx (Ubuntu's 1.18 package line), PHP 8.4 (from ppa:ondrej/php), Composer, and MongoDB Community 6.0 (from MongoDB's official Jammy repository). The `/git-pull` hook runs through PHP-FPM, so no nginx Lua module or external nginx repository is needed.
+This dockerfile builds an Ubuntu 22.04 development web server with standard nginx (Ubuntu's 1.18 package line), PHP 8.4 (from ppa:ondrej/php), Composer, and MongoDB Community 6.0 (from MongoDB's official Jammy repository). Deploy site content using an external workflow, such as GitHub Actions.
 
 The image tracks the MongoDB 6.0 package line rather than pinning exactly 6.0.29; installed patch versions depend on upstream availability. The `ubuntu:22.04` tag likewise tracks Jammy updates rather than a fixed 22.04.5 image. MongoDB 6.0 is end-of-life, so this stack is intended for development, not production.
 
@@ -41,6 +40,3 @@ Then navigate to the directory of interest, e.g. `/var/www/html`, and run php co
 ```bash
 composer require monogodb/mongodb
 ```
-
-## Additional Features
-This container implements a `git pull` hook within nginx that activates on navigation to `/git-pull`. This will only work if credentials to the repository have been set up accordingly for the root user and that the html directory is a git repository.

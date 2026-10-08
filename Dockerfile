@@ -16,7 +16,7 @@ RUN ln -fs /usr/share/zoneinfo/${TZ} /etc/localtime
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         software-properties-common ca-certificates curl gnupg lsb-release \
-        sudo git tzdata && \
+        tzdata && \
     add-apt-repository -y ppa:ondrej/php && \
     mkdir -p /etc/apt/keyrings && \
     curl -fsSL https://pgp.mongodb.com/server-6.0.asc | \
@@ -33,12 +33,9 @@ RUN apt-get update && \
 
 # Add configuration files
 COPY confs/nginx/default /etc/nginx/sites-available/default
-COPY confs/sudoers.d/nginxgit /etc/sudoers.d/nginxgit
 COPY scripts/start-services.sh /usr/local/bin/start-services.sh
-COPY scripts/git-pull.php /usr/local/lib/git-pull.php
 
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default && \
-    chmod 440 /etc/sudoers.d/nginxgit && \
     chmod 755 /usr/local/bin/start-services.sh
 
 # Expose HTML directory and nginx configs
