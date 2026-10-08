@@ -63,7 +63,7 @@ server {
 	#}
 	location ~ \.php$ {
 		include snippets/fastcgi-php.conf;
-		fastcgi_pass unix:/var/run/php/php7.2-fpm.sock;
+		fastcgi_pass unix:/run/php/php8.4-fpm.sock;
 	}
 	
 	# deny access to .htaccess files, if Apache's document root
@@ -105,9 +105,9 @@ server {
 	
 	# Git Pull Location
 	location /git-pull {
-		content_by_lua_block {
-			os.execute("bash -c 'sudo -n /usr/bin/git -C /var/www/html/ pull'")
-		}
+		include fastcgi_params;
+		fastcgi_param SCRIPT_FILENAME /usr/local/lib/git-pull.php;
+		fastcgi_pass unix:/run/php/php8.4-fpm.sock;
 	}
 }
 
